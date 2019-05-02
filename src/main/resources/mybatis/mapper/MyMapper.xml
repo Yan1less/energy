@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yan1less.enegry.mapper.MyMapper">
+
+    <select id="selectAll" resultType="com.yan1less.enegry.pojo.blogtext">
+        select * from blogtext;
+    </select>
+
+    <select id="selectEnegry" resultType="com.yan1less.enegry.pojo.enegry">
+        select * from tb_energy;
+    </select>
+
+    <select id="selectHumidity" resultType="com.yan1less.enegry.pojo.humidity">
+        select * from tb_humidity;
+    </select>
+
+    <select id="selectTemperature" resultType="com.yan1less.enegry.pojo.temperature">
+        select * from tb_temperature;
+    </select>
+
+
+
+
+
+
+
+
+</mapper>
