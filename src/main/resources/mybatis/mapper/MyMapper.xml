@@ -20,19 +20,34 @@
         select * from tb_temperature;
     </select>
 
+
     <select id="selectDevice" resultType="com.yan1less.enegry.pojo.deviceSQL">
-        select * from tb_devicefailure where factory=#{factory};
+        select * from tb_devicefailure where curDate=#{curDate} and factory = #{factory};
     </select>
 
+
+    <select id="selectDates" resultType="String">
+        select distinct curDate from tb_devicefailure ;
+    </select>
+
+
+    <select id="selectFactories" resultType="String">
+        select distinct factory from tb_devicefailure ;
+    </select>
 
     <select id="selectEvent" resultType="com.yan1less.enegry.pojo.eventSQL">
-        select * from tb_eventwarning where location=#{location};
+        select * from tb_eventwarning where location=#{location} and curDate=#{curDate};
     </select>
 
 
+    <select id="selectEventDates" resultType="String">
+        select distinct curDate from tb_eventwarning ;
+    </select>
 
 
-
+    <select id="selectEventLocations" resultType="String">
+        select distinct location from tb_eventwarning ;
+    </select>
 
 
 

@@ -57,48 +57,56 @@ public class MyServiceImpl implements MyService {
 
     @Override
     public String selectDevice() {
-        Map<Integer,String> map =  new HashMap<>();
-        map.put(1,"厂区A");
-        map.put(2,"厂区B");
-        map.put(3,"厂区C");
-        map.put(4,"厂区D");
-        map.put(5,"厂区E");
-//        map.put(1,"厂区A");
-        StringBuffer result = new StringBuffer();
-        for (int i =1;i<=5;i++) {
-            result.append(DeviceTools(i, map.get(i)));
-            if(i!=5)
-                result.append(",");
+        List<String> date = myMapper.selectDates();
+        List<String> factorys = myMapper.selectFactories();
+        int num = 1;
+        StringBuffer res = new StringBuffer();
+        for(int i=0;i<date.size();i++){
+            for(int j =0;j<factorys.size();j++){
+                if(i==date.size()-1 && j==factorys.size()-1)
+                    res.append(DeviceTools(num++,date.get(i),factorys.get(j)));
+                else
+                    res.append(DeviceTools(num++,date.get(i),factorys.get(j))+",");
+            }
         }
-        return "["+result.toString()+"]";
+
+        return "["+res.toString()+"]";
+
     }
+
+
 
     @Override
     public String selectEvent() {
-        Map<Integer,String> map =  new HashMap<>();
-        map.put(1,"数据中心A");
-        map.put(2,"数据中心B");
-        map.put(3,"数据中心C");
-        map.put(4,"数据中心D");
-        map.put(5,"数据中心E");
 
-        StringBuffer result = new StringBuffer();
-        for (int i =1;i<=5;i++) {
-            result.append(EventTools(i, map.get(i)));
-            if(i!=5)
-                result.append(",");
+        List<String> date = myMapper.selectEventDates();
+        List<String> locations = myMapper.selectEventLocations();
+        int num = 1;
+        StringBuffer res = new StringBuffer();
+        for(int i=0;i<date.size();i++){
+            for(int j =0;j<locations.size();j++){
+                if(i==date.size()-1 && j==locations.size()-1)
+                    res.append(EventTools(num++,date.get(i),locations.get(j)));
+                else
+                    res.append(EventTools(num++,date.get(i),locations.get(j))+",");
+            }
         }
-        return "["+result.toString()+"]";
+
+        return "["+res.toString()+"]";
+
     }
 
-    private String DeviceTools(Integer id,String factory){
-        List<deviceSQL> list = myMapper.selectDevice(factory);
+
+
+
+    private String DeviceTools(Integer id,String curDate,String factory){
+        List<deviceSQL> deviceSQLS = myMapper.selectDevice(curDate,factory);
         deviceJSON json = new deviceJSON();
         json.setFactory(factory);
         json.setId(id);
-        json.setTime(list.get(0).getCurDate());
+        json.setTime(curDate);
         List<deviceInfo> deviceInfos = new ArrayList<>();
-        for(deviceSQL i:list){
+        for(deviceSQL i:deviceSQLS){
             deviceInfo deviceInfo = new deviceInfo();
             deviceInfo.setDevice_name(i.getDevice());
             deviceInfo.setError_number(i.getFailure());
@@ -111,12 +119,10 @@ public class MyServiceImpl implements MyService {
         return s;
     }
 
-
-
-    private String EventTools(Integer id,String location){
-        List<eventSQL> list = myMapper.selectEvent(location);
+    private String EventTools(Integer id,String curDate,String location){
+        List<eventSQL> list = myMapper.selectEvent(location,curDate);
         eventJSON json = new eventJSON();
-        json.setTime(list.get(0).getCurDate());
+        json.setTime(curDate);
         json.setLocation(location);
         json.setId(id);
         List<eventInfo> eventInfos = new ArrayList<>();
@@ -132,6 +138,7 @@ public class MyServiceImpl implements MyService {
         String s = gson.toJson(json);
         return s;
     }
+
 
 
 
