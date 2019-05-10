@@ -41,6 +41,16 @@ public class Controller {
         return  myService.selectTemperature();
     }
 
+    @RequestMapping("/device")
+    public String selectDevice(){
+        return  myService.selectDevice();
+    }
+
+    @RequestMapping("/event")
+    public String selectEvent(){
+        return  myService.selectEvent();
+    }
+
 
 
 }

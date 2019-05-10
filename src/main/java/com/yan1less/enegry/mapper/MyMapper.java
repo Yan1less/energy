@@ -1,10 +1,7 @@
 package com.yan1less.enegry.mapper;
 
 import com.yan1less.enegry.annotation.DataSource;
-import com.yan1less.enegry.pojo.blogtext;
-import com.yan1less.enegry.pojo.enegry;
-import com.yan1less.enegry.pojo.humidity;
-import com.yan1less.enegry.pojo.temperature;
+import com.yan1less.enegry.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -26,4 +23,8 @@ public interface MyMapper {
     List<humidity> selectHumidity();
 
     List<temperature> selectTemperature();
+
+    List<deviceSQL> selectDevice(String factory);
+
+    List<eventSQL> selectEvent(String location);
 }

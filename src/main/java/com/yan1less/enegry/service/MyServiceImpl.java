@@ -2,14 +2,14 @@ package com.yan1less.enegry.service;
 
 import com.google.gson.Gson;
 import com.yan1less.enegry.mapper.MyMapper;
-import com.yan1less.enegry.pojo.blogtext;
-import com.yan1less.enegry.pojo.enegry;
-import com.yan1less.enegry.pojo.humidity;
-import com.yan1less.enegry.pojo.temperature;
+import com.yan1less.enegry.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Yan1less
@@ -54,4 +54,82 @@ public class MyServiceImpl implements MyService {
                 gson.toJson(temperatures)+"}";
         return res;
     }
+
+    @Override
+    public String selectDevice() {
+        Map<Integer,String> map =  new HashMap<>();
+        map.put(1,"厂区A");
+        map.put(2,"厂区B");
+        map.put(3,"厂区C");
+        map.put(4,"厂区D");
+        map.put(5,"厂区E");
+//        map.put(1,"厂区A");
+        String result = "";
+        for (int i =1;i<=5;i++) {
+            result+=DeviceTools(i, map.get(i));
+        }
+        return "["+result+"]";
+    }
+
+    @Override
+    public String selectEvent() {
+        Map<Integer,String> map =  new HashMap<>();
+        map.put(1,"数据中心A");
+        map.put(2,"数据中心B");
+        map.put(3,"数据中心C");
+        map.put(4,"数据中心D");
+        map.put(5,"数据中心E");
+
+        String result = "";
+        for (int i =1;i<=5;i++) {
+            result+=EventTools(i, map.get(i));
+        }
+        System.out.println(result);
+        return "["+result+"]";
+    }
+
+    private String DeviceTools(Integer id,String factory){
+        List<deviceSQL> list = myMapper.selectDevice(factory);
+        deviceJSON json = new deviceJSON();
+        json.setFactory(factory);
+        json.setId(id);
+        json.setTime(list.get(0).getCurDate());
+        List<deviceInfo> deviceInfos = new ArrayList<>();
+        for(deviceSQL i:list){
+            deviceInfo deviceInfo = new deviceInfo();
+            deviceInfo.setDevice_name(i.getDevice());
+            deviceInfo.setError_number(i.getFailure());
+            deviceInfo.setTotal_number(i.getTotal());
+            deviceInfos.add(deviceInfo);
+        }
+        json.setDevice_info(deviceInfos);
+        Gson gson = new Gson();
+        String s = gson.toJson(json);
+        return s;
+    }
+
+
+
+    private String EventTools(Integer id,String location){
+        List<eventSQL> list = myMapper.selectEvent(location);
+        eventJSON json = new eventJSON();
+        json.setTime(list.get(0).getCurDate());
+        json.setLocation(location);
+        json.setId(id);
+        List<eventInfo> eventInfos = new ArrayList<>();
+        for(eventSQL i:list){
+            eventInfo info = new eventInfo();
+            info.setEvent_type(i.getEventtype());
+            info.setWarning_info(i.getEventmessage());
+            info.setWarning_number(i.getError_num());
+            eventInfos.add(info);
+        }
+        json.setEvent_info(eventInfos);
+        Gson gson = new Gson();
+        String s = gson.toJson(json);
+        return s;
+    }
+
+
+
 }

@@ -20,6 +20,15 @@
         select * from tb_temperature;
     </select>
 
+    <select id="selectDevice" resultType="com.yan1less.enegry.pojo.deviceSQL">
+        select * from tb_devicefailure where factory=#{factory};
+    </select>
+
+
+    <select id="selectEvent" resultType="com.yan1less.enegry.pojo.eventSQL">
+        select * from tb_eventwarning where location=#{location};
+    </select>
+
 
 
 
