@@ -64,11 +64,13 @@ public class MyServiceImpl implements MyService {
         map.put(4,"厂区D");
         map.put(5,"厂区E");
 //        map.put(1,"厂区A");
-        String result = "";
+        StringBuffer result = new StringBuffer();
         for (int i =1;i<=5;i++) {
-            result+=DeviceTools(i, map.get(i));
+            result.append(DeviceTools(i, map.get(i)));
+            if(i!=5)
+                result.append(",");
         }
-        return "["+result+"]";
+        return "["+result.toString()+"]";
     }
 
     @Override
@@ -80,12 +82,13 @@ public class MyServiceImpl implements MyService {
         map.put(4,"数据中心D");
         map.put(5,"数据中心E");
 
-        String result = "";
+        StringBuffer result = new StringBuffer();
         for (int i =1;i<=5;i++) {
-            result+=EventTools(i, map.get(i));
+            result.append(EventTools(i, map.get(i)));
+            if(i!=5)
+                result.append(",");
         }
-        System.out.println(result);
-        return "["+result+"]";
+        return "["+result.toString()+"]";
     }
 
     private String DeviceTools(Integer id,String factory){
